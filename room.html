@@ -869,6 +869,52 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+// ── In-app browser detection (WhatsApp, Instagram, etc) ──
+(function() {
+  const ua = navigator.userAgent || '';
+  const isInApp = /FBAN|FBAV|Instagram|WhatsApp|Line|Twitter|Snapchat/.test(ua);
+  const isIOS = /iPhone|iPad|iPod/.test(ua);
+  if (isInApp && isIOS) {
+    document.body.innerHTML = `
+      <div style="
+        position:fixed;inset:0;background:#0a0806;
+        display:flex;flex-direction:column;
+        align-items:center;justify-content:center;
+        font-family:'Geist Mono',monospace;padding:40px;text-align:center;
+      ">
+        <div style="font-size:2rem;margin-bottom:24px;">🌐<\/div>
+        <div style="color:rgba(240,236,228,0.9);font-size:0.9rem;
+          letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;">
+          Open in Safari
+        <\/div>
+        <div style="color:rgba(240,236,228,0.4);font-size:0.65rem;
+          letter-spacing:0.1em;line-height:1.8;margin-bottom:32px;">
+          This experience uses 3D graphics that<br>
+          require Safari to run properly.<br><br>
+          Tap the button below or copy the link<br>
+          and paste it into Safari.
+        <\/div>
+        <a href="${window.location.href}"
+          style="
+            color:#d4924a;font-size:0.65rem;letter-spacing:0.2em;
+            text-transform:uppercase;text-decoration:none;
+            border:0.5px solid rgba(212,146,74,0.4);
+            padding:12px 24px;border-radius:6px;
+          "
+          target="_blank" rel="noopener">
+          Open in Safari →
+        <\/a>
+      <\/div>
+    `;
+    return;
+  }
+})();
+
+// ── Safari bfcache fix — WebGL context lost on navigation ──
+window.addEventListener('pageshow', (e) => {
+  if (e.persisted) window.location.reload();
+});
+
 // ── Cursor ───────────────────────────────────────────────
 const cursorEl  = document.getElementById('cursor');
 const mouse     = new THREE.Vector2(0, 0); // start centred
