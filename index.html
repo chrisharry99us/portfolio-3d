@@ -319,8 +319,12 @@ function enterSite() {
   const fade = document.getElementById('fade');
   fade.classList.add('out');
   setTimeout(() => {
-    window.location.href = 'room.html';
-  }, 1300);
+    try {
+      window.location.replace('room.html');
+    } catch(e) {
+      document.getElementById('safari-fallback').click();
+    }
+  }, 1200);
 }
 
 document.addEventListener('keydown', e => {
@@ -395,5 +399,6 @@ window.addEventListener('resize', () => {
   renderer.setSize(w, h);
 });
 </script>
+<a id="safari-fallback" href="room.html" style="display:none"></a>
 </body>
 </html>
