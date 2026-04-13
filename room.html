@@ -98,7 +98,7 @@
   }
 
   #fade.in  { opacity: 0 !important; pointer-events: none; }
-  #fade.out { opacity: 1; pointer-events: all; }
+  #fade.out { opacity: 1 !important; pointer-events: all; }
 
   /* Custom cursor */
   #cursor {
@@ -885,7 +885,11 @@ document.addEventListener('mousemove', e => {
 
 // ── Renderer ─────────────────────────────────────────────
 const container = document.getElementById('canvas-container');
-const renderer  = new THREE.WebGLRenderer({ antialias: true });
+const renderer  = new THREE.WebGLRenderer({
+  antialias: true,
+  powerPreference: 'high-performance',
+  alpha: false
+});
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 renderer.shadowMap.enabled = false;
@@ -2463,16 +2467,14 @@ function toggleMusic() {
 
 // Auto-start music when page loads
 window.addEventListener('load', () => {
-  // Fade in room
+  // Fade in room — setTimeout is more reliable than double-rAF on Safari
   const fade = document.getElementById('fade');
-  fade.style.opacity = '1';
-  fade.style.transition = 'opacity 1.8s ease';
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      fade.classList.add('in');
-      entered = true;
-    });
-  });
+  setTimeout(() => {
+    fade.style.transition = 'opacity 1.8s ease';
+    fade.style.opacity = '0';
+    fade.style.pointerEvents = 'none';
+    entered = true;
+  }, 200);
   // Show hint after 3 seconds
   setTimeout(() => {
     document.getElementById('hint').classList.add('visible');
