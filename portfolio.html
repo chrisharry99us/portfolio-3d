@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chris Rodrigues — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Geist+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0d0b08;
+    color: rgba(240,236,228,0.75);
+    font-family: 'Geist Mono', monospace;
+    min-height: 100vh;
+  }
+
+  /* ── Page wrapper ── */
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 28px;
+    border-bottom: 0.5px solid rgba(240,236,228,0.08);
+    margin-bottom: 40px;
+  }
+
+  .fs-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 300;
+    color: rgba(240,236,228,0.9);
+    letter-spacing: 0.08em;
+  }
+
+  .fs-subtitle {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.78rem;
+    color: #d4924a;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .back-link {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.68rem;
+    color: rgba(240,236,228,0.3);
+    text-decoration: none;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border: 0.5px solid rgba(240,236,228,0.1);
+    border-radius: 4px;
+    padding: 8px 16px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    margin-top: 8px;
+  }
+  .back-link:hover { color: rgba(240,236,228,0.7); border-color: rgba(240,236,228,0.25); }
+
+  /* ── Section labels ── */
+  .section-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.78rem;
+    color: #d4924a;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    margin-top: 44px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: rgba(240,236,228,0.07);
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  /* ── About ── */
+  .about-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.45rem;
+    font-weight: 300;
+    color: rgba(240,236,228,0.7);
+    line-height: 1.8;
+    margin-bottom: 14px;
+    max-width: 820px;
+  }
+
+  /* ── Skills ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .skill-group {
+    background: rgba(255,255,255,0.03);
+    border: 0.5px solid rgba(240,236,228,0.08);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+
+  .skill-group-title {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem;
+    color: #d4924a;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .skill-tag {
+    display: inline-block;
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.72rem;
+    color: rgba(240,236,228,0.5);
+    background: rgba(255,255,255,0.04);
+    border: 0.5px solid rgba(240,236,228,0.1);
+    border-radius: 4px;
+    padding: 4px 10px;
+    margin: 3px 3px 3px 0;
+  }
+
+  /* ── Projects ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .project-card {
+    background: rgba(255,255,255,0.03);
+    border: 0.5px solid rgba(240,236,228,0.08);
+    border-radius: 12px;
+    padding: 20px 22px;
+    transition: border-color 0.2s;
+  }
+  .project-card:hover { border-color: rgba(212,146,74,0.25); }
+
+  .project-type {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.7rem;
+    color: #d4924a;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .project-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: rgba(240,236,228,0.9);
+    margin-bottom: 10px;
+  }
+
+  .project-desc {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.72rem;
+    color: rgba(240,236,228,0.4);
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+
+  .project-links { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .project-link {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(240,236,228,0.35);
+    text-decoration: none;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 0.5px solid rgba(240,236,228,0.12);
+    border-radius: 4px;
+    padding: 6px 14px;
+    transition: all 0.2s;
+  }
+  .project-link:hover { color: rgba(240,236,228,0.8); border-color: rgba(240,236,228,0.3); }
+
+  @keyframes demoBlink {
+    0%, 100% { border-color: rgba(255,220,0,0.9); box-shadow: 0 0 6px rgba(255,220,0,0.6); }
+    50%       { border-color: rgba(255,220,0,0.15); box-shadow: 0 0 2px rgba(255,220,0,0.1); }
+  }
+  .demo-link {
+    color: rgba(240,236,228,0.7) !important;
+    border-color: rgba(255,220,0,0.9) !important;
+    animation: demoBlink 1.4s ease-in-out infinite;
+  }
+  .demo-link:hover {
+    color: #fff !important;
+    border-color: #ffdc00 !important;
+    box-shadow: 0 0 10px rgba(255,220,0,0.5);
+    animation: none;
+  }
+
+  /* ── Resume row ── */
+  .resume-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.03);
+    border: 0.5px solid rgba(240,236,228,0.08);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  .resume-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: rgba(240,236,228,0.85);
+    margin-bottom: 5px;
+  }
+  .resume-sub {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.72rem;
+    color: rgba(240,236,228,0.35);
+    letter-spacing: 0.15em;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(212,146,74,0.3); border-radius: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    .projects-grid, .skills-grid { grid-template-columns: 1fr; }
+    .page { padding: 28px 18px 60px; }
+    .page-header { flex-direction: column; gap: 16px; }
+    .fs-title { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <div class="fs-title">Chris Rodrigues</div>
+      <div class="fs-subtitle">Software Engineer &nbsp;·&nbsp; Data Scientist &nbsp;·&nbsp; Business Tech</div>
+    </div>
+    <a class="back-link" href="index.html">← Enter 3D Site</a>
+  </div>
+
+  <!-- About -->
+  <div class="section-label">About</div>
+  <p class="about-text">I started my career as a frontend developer — building user interfaces, learning how design translates into code, and developing a strong foundation in how software is experienced from the user's perspective.</p>
+  <p class="about-text">From there I pivoted fully into software engineering, spending several years in backend and full-stack roles building production systems — microservices, REST APIs, Kubernetes deployments — and developing a deep understanding of how technology works at scale.</p>
+  <p class="about-text">I've since moved into data analytics and machine learning in business settings, applying both engineering and analytical thinking to real-world problems. I now work at the intersection of data science, AI, and business intelligence — building systems that turn complex data into decisions.</p>
+
+  <!-- Skills -->
+  <div class="section-label">Skills &amp; Technologies</div>
+  <div class="skills-grid">
+    <div class="skill-group">
+      <div class="skill-group-title">AI &amp; Agents</div>
+      <span class="skill-tag">LangChain</span>
+      <span class="skill-tag">LangGraph</span>
+      <span class="skill-tag">CrewAI</span>
+      <span class="skill-tag">AutoGen</span>
+      <span class="skill-tag">BeeAI</span>
+      <span class="skill-tag">MCP</span>
+      <span class="skill-tag">LlamaIndex</span>
+      <span class="skill-tag">Hugging Face</span>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">RAG &amp; Vector DBs</div>
+      <span class="skill-tag">RAG Pipelines</span>
+      <span class="skill-tag">Chroma DB</span>
+      <span class="skill-tag">FAISS</span>
+      <span class="skill-tag">Pinecone</span>
+      <span class="skill-tag">Embedding Models</span>
+      <span class="skill-tag">Agentic AI</span>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Data Science &amp; ML</div>
+      <span class="skill-tag">Python</span>
+      <span class="skill-tag">R</span>
+      <span class="skill-tag">scikit-learn</span>
+      <span class="skill-tag">PyTorch</span>
+      <span class="skill-tag">Bayesian Inference</span>
+      <span class="skill-tag">SARIMA</span>
+      <span class="skill-tag">MCMC / Gibbs</span>
+      <span class="skill-tag">Deep Learning</span>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Analytics &amp; Visualization</div>
+      <span class="skill-tag">Pandas</span>
+      <span class="skill-tag">NumPy</span>
+      <span class="skill-tag">Streamlit</span>
+      <span class="skill-tag">Plotly</span>
+      <span class="skill-tag">Tableau</span>
+      <span class="skill-tag">Statistical Modelling</span>
+      <span class="skill-tag">Forecasting</span>
+      <span class="skill-tag">EDA</span>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Engineering</div>
+      <span class="skill-tag">Java / J2EE</span>
+      <span class="skill-tag">REST APIs</span>
+      <span class="skill-tag">Kubernetes</span>
+      <span class="skill-tag">Docker</span>
+      <span class="skill-tag">Angular</span>
+      <span class="skill-tag">TypeScript</span>
+      <span class="skill-tag">Git</span>
+      <span class="skill-tag">Splunk</span>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Databases</div>
+      <span class="skill-tag">PostgreSQL</span>
+      <span class="skill-tag">Oracle</span>
+      <span class="skill-tag">MongoDB</span>
+      <span class="skill-tag">SQL Analytics</span>
+      <span class="skill-tag">Relational DB Design</span>
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <div class="section-label">Projects</div>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-type">Time Series · Forecasting</div>
+      <div class="project-title">Time Series Analysis — SARIMA</div>
+      <div class="project-desc">Forecasting the future consumption of UK natural gas using decades of historic quarterly data — capturing seasonal demand cycles driven by winter heating peaks and long-run energy trends.<br><br>↗ Fitted SARIMA(2,0,3)(1,1,0)[4] with full ACF/PACF diagnostics and live forecast intervals.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;">
+        <span class="skill-tag">Python</span><span class="skill-tag">R</span><span class="skill-tag">statsmodels</span><span class="skill-tag">SARIMA</span><span class="skill-tag">Plotly</span>
+      </div>
+      <div class="project-links">
+        <a class="project-link" href="https://github.com/chrisharry99us/time-series-analysis" target="_blank">GitHub</a>
+        <a class="project-link demo-link" href="https://chris-timeseries-mds.streamlit.app" target="_blank">Live Demo</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-type">ML · Statistical Learning</div>
+      <div class="project-title">BRFSS Statistical Learning Dashboard</div>
+      <div class="project-desc">Using the Behavioral Risk Factor Surveillance System — the CDC's nationwide telephone survey of over 400,000 Americans — to surface meaningful insights about population health from dietary habits, physical activity, and lifestyle behaviours.<br><br>↗ Full ML pipeline (regression, classification, clustering) across 110K+ records — deployed as interactive Streamlit dashboard.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;">
+        <span class="skill-tag">Python</span><span class="skill-tag">scikit-learn</span><span class="skill-tag">Pandas</span><span class="skill-tag">Streamlit</span><span class="skill-tag">Plotly</span>
+      </div>
+      <div class="project-links">
+        <a class="project-link" href="https://github.com/chrisharry99us/brfss-statistical-learning" target="_blank">GitHub</a>
+        <a class="project-link demo-link" href="https://brfss-statistical-learning-chrisr.streamlit.app/" target="_blank">Live Demo</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-type">AI · Finance</div>
+      <div class="project-title">EconPulse <span style="font-size:0.68rem;color:#d4924a;letter-spacing:0.2em;"> · IN DEVELOPMENT</span></div>
+      <div class="project-desc">AI-powered economic intelligence platform for journalists and analysts. Monitors major US economic reports, generates structured briefings, supports historical Q&A, and delivers alerts via Slack and email.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;">
+        <span class="skill-tag">LangChain</span><span class="skill-tag">RAG</span><span class="skill-tag">Agents</span><span class="skill-tag">Python</span><span class="skill-tag">Vector DB</span>
+      </div>
+      <div class="project-links">
+        <a class="project-link" href="https://github.com/chrisharry99us" target="_blank">GitHub</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-type">Bayesian Statistics</div>
+      <div class="project-title">Bayesian Hierarchical Modelling</div>
+      <div class="project-desc">Standard polling averages mask group-level variation in public opinion — separate and pooled models both fail in opposite ways.<br><br>↗ Custom Gibbs sampler from scratch revealing posterior shrinkage across 5 demographic groups from 1,603 survey respondents.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;">
+        <span class="skill-tag">Python</span><span class="skill-tag">R</span><span class="skill-tag">NumPy</span><span class="skill-tag">MCMC</span><span class="skill-tag">Streamlit</span>
+      </div>
+      <div class="project-links">
+        <a class="project-link" href="https://github.com/chrisharry99us/bayesian-hierarchical-modeling" target="_blank">GitHub</a>
+        <a class="project-link demo-link" href="https://bayesian-hierarchical-modeling.streamlit.app" target="_blank">Live Demo</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-type">Engineering · Creative Dev</div>
+      <div class="project-title">This Portfolio</div>
+      <div class="project-desc">An immersive 3D portfolio experience built entirely in Three.js — cinematic rainy night intro, interactive living room, animated fire and rain, contact card flip, scrollable overlays, and live jazz radio. No frameworks, no build tools.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;">
+        <span class="skill-tag">Three.js</span><span class="skill-tag">JavaScript</span><span class="skill-tag">HTML/CSS</span><span class="skill-tag">Canvas API</span><span class="skill-tag">WebGL</span>
+      </div>
+      <div class="project-links">
+        <a class="project-link" href="https://github.com/chrisharry99us" target="_blank">GitHub</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Resume -->
+  <div class="section-label">Resume</div>
+  <div class="resume-row">
+    <div>
+      <div class="resume-title">Available for full-time &amp; contract roles</div>
+      <div class="resume-sub">Financial analytics &nbsp;·&nbsp; Data science &nbsp;·&nbsp; AI engineering</div>
+    </div>
+    <a href="/resume.pdf" target="_blank" class="project-link" style="white-space:nowrap;">Download CV</a>
+  </div>
+
+</div>
+</body>
+</html>
