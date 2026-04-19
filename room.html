@@ -418,6 +418,23 @@
     border-color: rgba(240,236,228,0.3);
   }
 
+  @keyframes demoBlink {
+    0%, 100% { border-color: rgba(255,220,0,0.9); box-shadow: 0 0 6px rgba(255,220,0,0.6); }
+    50%       { border-color: rgba(255,220,0,0.15); box-shadow: 0 0 2px rgba(255,220,0,0.1); }
+  }
+
+  .demo-link {
+    color: rgba(240,236,228,0.7) !important;
+    border-color: rgba(255,220,0,0.9) !important;
+    animation: demoBlink 1.4s ease-in-out infinite;
+  }
+  .demo-link:hover {
+    color: #fff !important;
+    border-color: #ffdc00 !important;
+    box-shadow: 0 0 10px rgba(255,220,0,0.5);
+    animation: none;
+  }
+
   /* Blog styles */
   .blog-post {
     border-bottom: 0.5px solid rgba(240,236,228,0.07);
@@ -720,7 +737,7 @@
           </div>
           <div class="project-links">
             <a class="project-link" href="https://github.com/chrisharry99us/time-series-analysis" target="_blank">GitHub</a>
-            <a class="project-link" href="https://chris-timeseries-mds.streamlit.app" target="_blank">Live Demo</a>
+            <a class="project-link demo-link" href="https://chris-timeseries-mds.streamlit.app" target="_blank">Live Demo</a>
           </div>
         </div>
 
@@ -733,7 +750,7 @@
           </div>
           <div class="project-links">
             <a class="project-link" href="https://github.com/chrisharry99us/brfss-statistical-learning" target="_blank">GitHub</a>
-            <a class="project-link" href="https://brfss-statistical-learning-chrisr.streamlit.app/" target="_blank">Live Demo</a>
+            <a class="project-link demo-link" href="https://brfss-statistical-learning-chrisr.streamlit.app/" target="_blank">Live Demo</a>
           </div>
         </div>
 
@@ -746,7 +763,7 @@
           </div>
           <div class="project-links">
             <a class="project-link" href="https://github.com/chrisharry99us/bayesian-hierarchical-modeling" target="_blank">GitHub</a>
-            <a class="project-link" href="https://bayesian-hierarchical-modeling.streamlit.app" target="_blank">Live Demo</a>
+            <a class="project-link demo-link" href="https://bayesian-hierarchical-modeling.streamlit.app" target="_blank">Live Demo</a>
           </div>
         </div>
 
