@@ -20,9 +20,12 @@
     position: fixed;
     inset: 0;
     z-index: 0;
+    will-change: transform;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 
-  canvas { display: block; }
+  canvas { display: block; transform: translateZ(0); -webkit-transform: translateZ(0); }
 
   /* Vignette */
   #vignette {
@@ -950,7 +953,7 @@ document.addEventListener('mousemove', e => {
 const container = document.getElementById('canvas-container');
 const renderer  = new THREE.WebGLRenderer({
   antialias: true,
-  powerPreference: 'high-performance',
+  powerPreference: 'default',
   alpha: false
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -959,6 +962,9 @@ renderer.shadowMap.enabled = false;
 renderer.toneMapping = THREE.LinearToneMapping;
 renderer.toneMappingExposure = 1.0;
 container.appendChild(renderer.domElement);
+// Safari compositing fix — forces canvas onto its own GPU layer
+renderer.domElement.style.webkitTransform = 'translateZ(0)';
+renderer.domElement.style.transform = 'translateZ(0)';
 
 // ── Scene ────────────────────────────────────────────────
 const scene = new THREE.Scene();
@@ -2530,28 +2536,15 @@ function toggleMusic() {
 
 // Auto-start music when page loads
 window.addEventListener('load', () => {
+  // Safari/Mac fix: force canvas resize and an initial render frame on load.
+  // Without this, navigating from index.html can leave the WebGL canvas black.
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.render(scene, camera);
+
   // Fade in room — setTimeout is more reliable than double-rAF on Safari
   const fade = document.getElementById('fade');
   setTimeout(() => {
     fade.style.transition = 'opacity 1.8s ease';
-    fade.style.opacity = '0';
-    fade.style.pointerEvents = 'none';
-    entered = true;
-  }, 200);
-  // Show hint after 3 seconds
-  setTimeout(() => {
-    document.getElementById('hint').classList.add('visible');
-  }, 3000);
-  // Start music with slight delay
-  setTimeout(startMusic, 1200);
-});
-
-// ── Resize ───────────────────────────────────────────────
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
-</script>
-</body>
-</html>
+    fa
