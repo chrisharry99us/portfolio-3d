@@ -20,12 +20,9 @@
     position: fixed;
     inset: 0;
     z-index: 0;
-    will-change: transform;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
   }
 
-  canvas { display: block; transform: translateZ(0); -webkit-transform: translateZ(0); }
+  canvas { display: block; }
 
   /* Vignette */
   #vignette {
@@ -962,9 +959,6 @@ renderer.shadowMap.enabled = false;
 renderer.toneMapping = THREE.LinearToneMapping;
 renderer.toneMappingExposure = 1.0;
 container.appendChild(renderer.domElement);
-// Safari compositing fix — forces canvas onto its own GPU layer
-renderer.domElement.style.webkitTransform = 'translateZ(0)';
-renderer.domElement.style.transform = 'translateZ(0)';
 
 // ── Scene ────────────────────────────────────────────────
 const scene = new THREE.Scene();
@@ -2536,15 +2530,23 @@ function toggleMusic() {
 
 // Auto-start music when page loads
 window.addEventListener('load', () => {
-  // Safari/Mac fix: force canvas resize and an initial render frame on load.
-  // Without this, navigating from index.html can leave the WebGL canvas black.
+  // Safari/Mac fix: force a resize + render on load to fix black canvas after navigation.
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.render(scene, camera);
+  // Safari sometimes needs a synthetic resize event to flush the compositor.
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  if (isSafari) {
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
+  }
 
   // Fade in room — setTimeout is more reliable than double-rAF on Safari
   const fade = document.getElementById('fade');
   setTimeout(() => {
     fade.style.transition = 'opacity 1.8s ease';
-    fa
+    fade.style.opacity = '0';
+    fade.style.pointerEvents = 'none';
+    entered = true;
+  },
