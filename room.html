@@ -2530,13 +2530,13 @@ function toggleMusic() {
 
 // Auto-start music when page loads
 window.addEventListener('load', () => {
-  // Safari/Mac fix: force a resize + render on load to fix black canvas after navigation.
+  // Safari/Mac fix: force resize + render on load (black canvas after navigation).
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.render(scene, camera);
-  // Safari sometimes needs a synthetic resize event to flush the compositor.
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  // Safari sometimes needs a synthetic resize to flush the compositor.
+  const isSafari = /^((?\!chrome|android).)*safari/i.test(navigator.userAgent);
   if (isSafari) {
     setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
     setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
@@ -2549,4 +2549,21 @@ window.addEventListener('load', () => {
     fade.style.opacity = '0';
     fade.style.pointerEvents = 'none';
     entered = true;
-  },
+  }, 200);
+  // Show hint after 3 seconds
+  setTimeout(() => {
+    document.getElementById('hint').classList.add('visible');
+  }, 3000);
+  // Start music with slight delay
+  setTimeout(startMusic, 1200);
+});
+
+// ── Resize ───────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>
