@@ -155,15 +155,9 @@
 <div id="lightning"></div>
 <div id="vignette"></div>
 
-<div id="identity">
-  <div id="name">Chris</div>
-  <div id="tagline">Engineer &nbsp;·&nbsp; Data Scientist &nbsp;·&nbsp; Business Tech</div>
-</div>
+<div id="identity"></div>
 
-<a id="enter" href="room.html" onclick="enterSite(event)">
-  <span>Skip intro</span>
-  <i id="enter-arrow"></i>
-</a>
+<a id="enter" href="room.html" onclick="enterSite(event)"></a>
 <a id="safari-fallback" href="room.html" style="display:none"></a>
 
 <div id="fade"></div>
@@ -303,11 +297,11 @@ function triggerLightning() {
 
 // ── Identity reveal timing ───────────────────────────────
 setTimeout(() => {
-  document.getElementById('identity').classList.add('visible');
+  var _id = document.getElementById('identity'); if (_id) _id.classList.add('visible');
 }, 2800);
 
 setTimeout(() => {
-  document.getElementById('enter').classList.add('visible');
+  var _en = document.getElementById('enter'); if (_en) _en.classList.add('visible');
 }, 5000);
 
 // ── Auto-transition after cinematic ──────────────────────
