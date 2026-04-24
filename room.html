@@ -886,6 +886,24 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+// ── EARLY DEBUG — runs before main script ─────────────────
+(function() {
+  var d = document.createElement('div');
+  d.id = '_dbg';
+  d.style.cssText = 'position:fixed;top:0;left:0;z-index:99999;background:rgba(0,0,0,0.9);color:#0f0;font:13px monospace;padding:10px;max-width:95vw;pointer-events:none;line-height:1.9;';
+  document.body ? document.body.appendChild(d) : document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(d); });
+  window._dbg = d;
+  window.dbg = function(msg) {
+    console.log('[DBG]', msg);
+    d.innerHTML += msg + '<br>';
+  };
+  window.dbg('0. THREE loaded: ' + (typeof THREE \!== 'undefined'));
+  window.addEventListener('error', function(e) {
+    window.dbg('ERROR: ' + e.message + ' (line ' + e.lineno + ')');
+  });
+})();
+</script>
+<script>
 // ── In-app browser detection (WhatsApp, Instagram, etc) ──
 (function() {
   const ua = navigator.userAgent || '';
@@ -959,17 +977,7 @@ renderer.shadowMap.enabled = false;
 renderer.toneMapping = THREE.LinearToneMapping;
 renderer.toneMappingExposure = 1.0;
 container.appendChild(renderer.domElement);
-
-// ── DEBUG overlay (remove after diagnosis) ───────────────
-const _dbg = document.createElement('div');
-_dbg.style.cssText = 'position:fixed;top:10px;left:10px;z-index:9999;background:rgba(0,0,0,0.85);color:#0f0;font:13px monospace;padding:12px;max-width:90vw;pointer-events:none;line-height:1.8;';
-document.body.appendChild(_dbg);
-function dbg(msg) { console.log('[DBG]', msg); _dbg.innerHTML += msg + '<br>'; }
-dbg('1. script running');
-dbg('2. renderer: ' + (renderer ? 'OK' : 'FAIL'));
-try { dbg('3. gl: ' + renderer.getContext().constructor.name); } catch(e) { dbg('3. gl ERROR: ' + e); }
-dbg('4. canvas: ' + renderer.domElement.width + 'x' + renderer.domElement.height);
-dbg('5. window: ' + window.innerWidth + 'x' + window.innerHeight);
+dbg('1. renderer OK, canvas: ' + renderer.domElement.width + 'x' + renderer.domElement.height);
 
 // ── Scene ────────────────────────────────────────────────
 const scene = new THREE.Scene();
@@ -2452,7 +2460,7 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-dbg('6. animate() called');
+dbg('2. animate() called');
 animate();
 
 // ── Fade in on load ──────────────────────────────────────
@@ -2542,21 +2550,11 @@ function toggleMusic() {
 
 // Auto-start music when page loads
 window.addEventListener('load', () => {
-  dbg('7. load fired. w=' + window.innerWidth + ' h=' + window.innerHeight);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.render(scene, camera);
-  const isSafari = /safari/i.test(navigator.userAgent) && \!/chrome/i.test(navigator.userAgent);
-  dbg('8. isSafari=' + isSafari + ' ua=' + navigator.userAgent.slice(0,60));
-  if (isSafari) {
-    setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
-    setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
-  }
+  dbg('3. load event fired');
   // Fade in room — setTimeout is more reliable than double-rAF on Safari
   const fade = document.getElementById('fade');
   setTimeout(() => {
-    dbg('9. fade removed');
+    dbg('4. fade removed');
     fade.style.transition = 'opacity 1.8s ease';
     fade.style.opacity = '0';
     fade.style.pointerEvents = 'none';
