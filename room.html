@@ -2442,17 +2442,11 @@ function animate() {
 }
 
 animate();
-
-// Safari fallback: if window.load never fires (resource hanging), remove fade after 1.5s
+// Safari fallback: if load never fires, remove fade after 1.5s
 setTimeout(function() {
-  if (\!entered) {
-    var fade = document.getElementById('fade');
-    if (fade) {
-      fade.style.transition = 'opacity 1.8s ease';
-      fade.style.opacity = '0';
-      fade.style.pointerEvents = 'none';
-      entered = true;
-    }
+  if (entered === false) {
+    var f = document.getElementById("fade");
+    if (f) { f.style.transition = "opacity 1.8s ease"; f.style.opacity = "0"; f.style.pointerEvents = "none"; entered = true; }
   }
 }, 1500);
 
