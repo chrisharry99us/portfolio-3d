@@ -960,19 +960,15 @@ renderer.toneMapping = THREE.LinearToneMapping;
 renderer.toneMappingExposure = 1.0;
 container.appendChild(renderer.domElement);
 
-// ── DEBUG (remove after diagnosis) ───────────────────────
+// ── DEBUG overlay (remove after diagnosis) ───────────────
 const _dbg = document.createElement('div');
-_dbg.id = 'debug-overlay';
-_dbg.style.cssText = 'position:fixed;top:10px;left:10px;z-index:9999;background:rgba(0,0,0,0.8);color:#0f0;font:12px monospace;padding:10px;max-width:90vw;pointer-events:none;';
+_dbg.style.cssText = 'position:fixed;top:10px;left:10px;z-index:9999;background:rgba(0,0,0,0.85);color:#0f0;font:13px monospace;padding:12px;max-width:90vw;pointer-events:none;line-height:1.8;';
 document.body.appendChild(_dbg);
-function dbg(msg) {
-  console.log('[ROOM DEBUG]', msg);
-  _dbg.innerHTML += msg + '<br>';
-}
-dbg('1. Script running');
-dbg('2. Renderer created: ' + (renderer ? 'YES' : 'NO'));
-dbg('3. GL context: ' + (renderer.getContext() ? renderer.getContext().constructor.name : 'NULL'));
-dbg('4. Canvas size: ' + renderer.domElement.width + 'x' + renderer.domElement.height);
+function dbg(msg) { console.log('[DBG]', msg); _dbg.innerHTML += msg + '<br>'; }
+dbg('1. script running');
+dbg('2. renderer: ' + (renderer ? 'OK' : 'FAIL'));
+try { dbg('3. gl: ' + renderer.getContext().constructor.name); } catch(e) { dbg('3. gl ERROR: ' + e); }
+dbg('4. canvas: ' + renderer.domElement.width + 'x' + renderer.domElement.height);
 dbg('5. window: ' + window.innerWidth + 'x' + window.innerHeight);
 
 // ── Scene ────────────────────────────────────────────────
@@ -2456,7 +2452,7 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-dbg('6. animate() starting');
+dbg('6. animate() called');
 animate();
 
 // ── Fade in on load ──────────────────────────────────────
@@ -2546,14 +2542,40 @@ function toggleMusic() {
 
 // Auto-start music when page loads
 window.addEventListener('load', () => {
-  dbg('7. load event fired');
-  dbg('8. fade el: ' + (document.getElementById('fade') ? 'found' : 'MISSING'));
-  // Safari/Mac fix: force resize + render on load (black canvas after navigation).
+  dbg('7. load fired. w=' + window.innerWidth + ' h=' + window.innerHeight);
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.render(scene, camera);
-  // Safari sometimes needs a synthetic resize to flush the compositor.
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const isSafari = /safari/i.test(navigator.userAgent) && \!/chrome/i.test(navigator.userAgent);
+  dbg('8. isSafari=' + isSafari + ' ua=' + navigator.userAgent.slice(0,60));
   if (isSafari) {
-    setTimeout(() => window.dispatchEvent(new Event('r
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 500);
+  }
+  // Fade in room — setTimeout is more reliable than double-rAF on Safari
+  const fade = document.getElementById('fade');
+  setTimeout(() => {
+    dbg('9. fade removed');
+    fade.style.transition = 'opacity 1.8s ease';
+    fade.style.opacity = '0';
+    fade.style.pointerEvents = 'none';
+    entered = true;
+  }, 200);
+  // Show hint after 3 seconds
+  setTimeout(() => {
+    document.getElementById('hint').classList.add('visible');
+  }, 3000);
+  // Start music with slight delay
+  setTimeout(startMusic, 1200);
+});
+
+// ── Resize ───────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>
