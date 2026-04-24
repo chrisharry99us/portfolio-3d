@@ -2504,9 +2504,9 @@ function startMusic() {
     // Fade volume in over 4 seconds
     let vol = 0;
     const fadeIn = setInterval(() => {
-      vol = Math.min(vol + 0.01, 0.35);
+      vol = Math.min(vol + 0.01, 0.175);
       bgMusic.volume = vol;
-      if (vol >= 0.35) clearInterval(fadeIn);
+      if (vol >= 0.175) clearInterval(fadeIn);
     }, 120);
   }).catch(() => {
     // Autoplay blocked — wait for first interaction
@@ -2515,9 +2515,9 @@ function startMusic() {
       bgMusic.play().then(() => {
         let vol = 0;
         const fadeIn = setInterval(() => {
-          vol = Math.min(vol + 0.01, 0.35);
+          vol = Math.min(vol + 0.01, 0.175);
           bgMusic.volume = vol;
-          if (vol >= 0.35) clearInterval(fadeIn);
+          if (vol >= 0.175) clearInterval(fadeIn);
         }, 120);
       });
     }, { once: true });
