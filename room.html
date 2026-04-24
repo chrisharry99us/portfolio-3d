@@ -888,16 +888,15 @@
 <script>
 (function() {
   var d = document.createElement('div');
-  d.id = '_dbg';
   d.style.cssText = 'position:fixed;top:0;left:0;z-index:99999;background:rgba(0,0,0,0.9);color:#0f0;font:13px monospace;padding:10px;max-width:95vw;pointer-events:none;line-height:1.9;';
   if (document.body) { document.body.appendChild(d); }
   else { document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(d); }); }
   window.dbg = function(msg) { console.log('[DBG]', msg); d.innerHTML += msg + '<br>'; };
-  var threeLoaded = (typeof THREE === 'function' || typeof THREE === 'object') ? 'YES' : 'NO';
-  window.dbg('0. THREE loaded: ' + threeLoaded);
-  window.addEventListener('error', function(e) {
-    window.dbg('JS ERROR: ' + e.message + ' line:' + e.lineno);
-  });
+  window.dbg('0. THREE: ' + (typeof THREE === 'object' ? 'YES' : 'NO'));
+  window.addEventListener('error', function(e) { window.dbg('ERR: ' + e.message + ' L' + e.lineno); });
+  window.addEventListener('DOMContentLoaded', function() { window.dbg('EVT: DOMContentLoaded'); });
+  window.addEventListener('load', function() { window.dbg('EVT: load'); });
+  window.addEventListener('pageshow', function(e) { window.dbg('EVT: pageshow persisted=' + e.persisted); });
 })();
 </script>
 <script>
@@ -974,7 +973,7 @@ renderer.shadowMap.enabled = false;
 renderer.toneMapping = THREE.LinearToneMapping;
 renderer.toneMappingExposure = 1.0;
 container.appendChild(renderer.domElement);
-dbg('1. renderer OK ' + renderer.domElement.width + 'x' + renderer.domElement.height);
+dbg('1. renderer OK');
 
 // ── Scene ────────────────────────────────────────────────
 const scene = new THREE.Scene();
@@ -2457,7 +2456,7 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-dbg('2. animate() called');
+dbg('2. animate called');
 animate();
 
 // ── Fade in on load ──────────────────────────────────────
@@ -2547,7 +2546,7 @@ function toggleMusic() {
 
 // Auto-start music when page loads
 window.addEventListener('load', () => {
-  dbg('3. load fired w=' + window.innerWidth + ' h=' + window.innerHeight);
+  dbg('3. load handler ran');
   // Fade in room — setTimeout is more reliable than double-rAF on Safari
   const fade = document.getElementById('fade');
   setTimeout(() => {
