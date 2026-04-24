@@ -886,20 +886,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-(function() {
-  var d = document.createElement('div');
-  d.style.cssText = 'position:fixed;top:0;left:0;z-index:99999;background:rgba(0,0,0,0.9);color:#0f0;font:13px monospace;padding:10px;max-width:95vw;pointer-events:none;line-height:1.9;';
-  if (document.body) { document.body.appendChild(d); }
-  else { document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(d); }); }
-  window.dbg = function(msg) { console.log('[DBG]', msg); d.innerHTML += msg + '<br>'; };
-  window.dbg('0. THREE: ' + (typeof THREE === 'object' ? 'YES' : 'NO'));
-  window.addEventListener('error', function(e) { window.dbg('ERR: ' + e.message + ' L' + e.lineno); });
-  window.addEventListener('DOMContentLoaded', function() { window.dbg('EVT: DOMContentLoaded'); });
-  window.addEventListener('load', function() { window.dbg('EVT: load'); });
-  window.addEventListener('pageshow', function(e) { window.dbg('EVT: pageshow persisted=' + e.persisted); });
-})();
-</script>
-<script>
 // ── In-app browser detection (WhatsApp, Instagram, etc) ──
 (function() {
   const ua = navigator.userAgent || '';
@@ -973,7 +959,6 @@ renderer.shadowMap.enabled = false;
 renderer.toneMapping = THREE.LinearToneMapping;
 renderer.toneMappingExposure = 1.0;
 container.appendChild(renderer.domElement);
-dbg('1. renderer OK');
 
 // ── Scene ────────────────────────────────────────────────
 const scene = new THREE.Scene();
@@ -2456,8 +2441,20 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-dbg('2. animate called');
 animate();
+
+// Safari fallback: if window.load never fires (resource hanging), remove fade after 1.5s
+setTimeout(function() {
+  if (\!entered) {
+    var fade = document.getElementById('fade');
+    if (fade) {
+      fade.style.transition = 'opacity 1.8s ease';
+      fade.style.opacity = '0';
+      fade.style.pointerEvents = 'none';
+      entered = true;
+    }
+  }
+}, 1500);
 
 // ── Fade in on load ──────────────────────────────────────
 // ── Full screen overlays ──────────────────────────────────
@@ -2546,11 +2543,9 @@ function toggleMusic() {
 
 // Auto-start music when page loads
 window.addEventListener('load', () => {
-  dbg('3. load handler ran');
   // Fade in room — setTimeout is more reliable than double-rAF on Safari
   const fade = document.getElementById('fade');
   setTimeout(() => {
-    dbg('4. fade removed');
     fade.style.transition = 'opacity 1.8s ease';
     fade.style.opacity = '0';
     fade.style.pointerEvents = 'none';
